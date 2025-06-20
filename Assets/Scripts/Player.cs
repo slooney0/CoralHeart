@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 
+    [SerializeField] LayerMask enemyLayer;
+
     //private fields
 
     /**
@@ -45,6 +47,8 @@ public class Player : MonoBehaviour
     /** Vector representing the location of the mouse */
     private Vector3 mouseInput;
 
+    private Vector2 direction;
+
     /** Float that represents the angle of the player in radians */
     float angleRad;
 
@@ -55,6 +59,14 @@ public class Player : MonoBehaviour
     private Vector3 startingPosition = new Vector3(0,0,0);
 
     public bool pDead = false;
+
+    private enum attackType
+    {
+        basic,
+        sword
+    }
+
+    private attackType currentWeapon;
 
     //Game object fields
 
@@ -67,6 +79,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         dashCoolDownCounter = dashCoolDown;
         health = startHealth;
+        currentWeapon = attackType.basic;
     }
 
     void Update()
@@ -85,7 +98,7 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector3(dirX * playerSpeed, dirY * playerSpeed, 0);
         }
 
-        Vector2 direction = (mouseInput - transform.position).normalized;
+        direction = (mouseInput - transform.position).normalized;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
@@ -103,6 +116,11 @@ public class Player : MonoBehaviour
             dashCoolDownCounter -= Time.deltaTime;
         }
 
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            attack();
+            Debug.Log("Attack");
+        }
 
         //To Be Removed
         if (pDead)
@@ -130,6 +148,20 @@ public class Player : MonoBehaviour
         mouseInput = context.ReadValue<Vector2>();
     }
 
+    private void attack()
+    {
+        if (currentWeapon.Equals(attackType.basic))
+        {
+            Collider2D[] hit = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + direction.x * 2f, transform.position.y + direction.y * 2f), new Vector2(0.5f, 0.5f), 0f, enemyLayer);
+            Debug.DrawRay(transform.position, direction, Color.blue, 2f);
+
+            foreach (Collider2D col in hit)
+            {
+                Debug.Log("Hit you!");
+            }
+        }
+    }
+
     public void Damage(float damage)
     {
         health -= damage;
@@ -146,4 +178,5 @@ public class Player : MonoBehaviour
         health = startHealth;
         transform.position = startingPosition;
     }
+
 }

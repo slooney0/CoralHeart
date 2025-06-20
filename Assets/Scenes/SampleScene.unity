@@ -221,6 +221,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f22072fcc1bc3c4cb3cba2bbbb3d7f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
   pDead: 0
 --- !u!50 &269582644
 Rigidbody2D:
@@ -677,7 +680,7 @@ GameObject:
   - component: {fileID: 980361259}
   - component: {fileID: 980361258}
   - component: {fileID: 980361257}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -857,7 +860,7 @@ GameObject:
   - component: {fileID: 1724110189}
   - component: {fileID: 1724110188}
   - component: {fileID: 1724110187}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
