@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
 
     private float damage = 20f;
 
+    private float health = 30f;
+
     private bool isAttacking;
 
     private bool isCharging;
@@ -88,7 +90,7 @@ public class Enemy : MonoBehaviour
 
         if (isAttacking && stunTimer <= 0)
         {
-            pScript.Damage(damage);
+            //pScript.Damage(damage);
             isAttacking = false;
             canMove = false;
             sRend.color = Color.yellow;
@@ -110,6 +112,17 @@ public class Enemy : MonoBehaviour
         if (pScript.pDead == true)
         {
             Reset();
+        }
+    }
+
+    public void Damage(float damage)
+    {
+        //health -= damage;
+        stunTime = stunTimer;
+        Debug.Log("enemy hit");
+        if (health <= 0)
+        {
+            gameObject.SetActive(false);
         }
     }
 

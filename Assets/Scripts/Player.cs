@@ -50,23 +50,17 @@ public class Player : MonoBehaviour
     private Vector2 direction;
 
     /** Float that represents the angle of the player in radians */
-    float angleRad;
+    public float angleRad;
 
     private float startHealth = 100f;
 
     private float health;
 
+    private MeleeWeapon currentWeapon;
+
     private Vector3 startingPosition = new Vector3(0,0,0);
 
     public bool pDead = false;
-
-    private enum attackType
-    {
-        basic,
-        sword
-    }
-
-    private attackType currentWeapon;
 
     //Game object fields
 
@@ -79,7 +73,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         dashCoolDownCounter = dashCoolDown;
         health = startHealth;
-        currentWeapon = attackType.basic;
+        currentWeapon = new BaseWeapon(gameObject);
     }
 
     void Update()
@@ -119,7 +113,6 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0))
         {
             attack();
-            Debug.Log("Attack");
         }
 
         //To Be Removed
@@ -150,16 +143,13 @@ public class Player : MonoBehaviour
 
     private void attack()
     {
-        if (currentWeapon.Equals(attackType.basic))
-        {
-            Collider2D[] hit = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + direction.x * 2f, transform.position.y + direction.y * 2f), new Vector2(0.5f, 0.5f), 0f, enemyLayer);
-            Debug.DrawRay(transform.position, direction, Color.blue, 2f);
+        currentWeapon.Attack();
+    }
 
-            foreach (Collider2D col in hit)
-            {
-                Debug.Log("Hit you!");
-            }
-        }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(new Vector2(transform.position.x + (Mathf.Cos(transform.eulerAngles.z * Mathf.PI / 180) * 1.1f), transform.position.y + (Mathf.Sin(transform.eulerAngles.z * Mathf.PI / 180)) * 1.1f), new Vector2(1f, 1f));
     }
 
     public void Damage(float damage)
@@ -179,4 +169,8 @@ public class Player : MonoBehaviour
         transform.position = startingPosition;
     }
 
+    public float getRotation()
+    {
+        return angleRad;
+    }
 }
